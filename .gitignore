@@ -1,0 +1,5 @@
+*.o
+ga-results/
+results/
+bin/
+*~

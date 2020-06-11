@@ -1,0 +1,132 @@
+%YAML 1.2
+---
+
+step: 0.01
+
+##--------------
+##  NEURONS   ||
+##--------------
+VPd: 
+  a: 0.02
+  b: 0.25
+  c: -65.0
+  d: 2
+  threshold: 30.0
+#LTS
+
+DP:
+  a: 0.1
+  b: 0.26
+  c: -65.0
+  d: 2
+  threshold: 30.0
+#Regular frequency spiking
+
+PCN:
+  a: 0.02
+  b: 0.2
+  c: -65.0
+  d: 8
+  threshold: 30.0
+#Regular Spiking
+
+CN:
+  a: 0.02
+  b: 0.25
+  c: -65.0
+  d: 6
+  threshold: 30.0
+#Phasic spiking
+
+##---------------
+##  SYNAPSES   ||
+##---------------
+
+VPd_DP:
+  alpha: 5
+  beta: 0.005
+  threshold: 0
+  esyn: -80
+  gsyn: -0.12
+  T: 1.0
+  max_release_time: 160
+
+VPd_PCN: 
+  alpha: 5
+  beta: 0.005
+  threshold: 0
+  esyn: -80
+  gsyn: -0.11
+  T: 1.0
+  max_release_time: 160
+
+DP_CN:
+  alpha: 5
+  beta: 0.1
+  threshold: 0
+  esyn: -80
+  gsyn: 0.2
+  T: 1.0
+  max_release_time: 40
+
+PCN_CN:
+  alpha: 5
+  beta: 0.18
+  threshold: 0
+  esyn: -80
+  gsyn: 0.28
+  T: 1.0
+  max_release_time: 40
+
+#Corolary Discharge
+CN_VPd:
+  alpha: 5
+  beta: 0.02
+  threshold: 0
+  esyn: -80
+  gsyn: 0.3
+  T: 6.0
+  max_release_time: 400
+
+
+##----------------
+##  SIMULATION   ||
+##----------------
+scal_test:
+  simulation: [520,     160,     520]
+  VPd_in:     [-0.5,     0,     -0.5]
+  DP_in:      [1.7,     1.7,    1.7]
+  PCN_in:     [6.5,     14,     6.5]
+
+acc_test:
+  simulation: [800,    400,    800]
+  VPd_in:     [-0.5,   -0.5,   -0.5]
+  DP_in:      [1.7,   4,    1.7]
+  PCN_in:     [6.5,    5,    6.5] 
+
+rasp_test:
+  simulation: [500,    100,     250,     500]
+  VPd_in:     [-0.5,   -0.5,   -0.5,    -0.5]
+  DP_in:      [1.7,    1.7,    4,     1.7]
+  PCN_in:     [6.5,    15,     6,     6.5]
+
+cess_test:
+  simulation: [250,    400,     250]
+  VPd_in:     [-0.5,   8,      -0.5]
+  DP_in:      [1.7,    1.5,    1.7]
+  PCN_in:     [6.5,    6,      6.5]
+
+##-----------------
+##  TARGET SPIs   ||
+##-----------------
+
+targets:
+  scallop: [[140, 110, 20, 30, 75, 155, 120, 120], #770
+            [120, 120, 15, 35, 55, 130, 120, 120], #715
+            [110, 110, 45, 20, 50, 140, 110, 120]] #705
+  acceleration: [[120, 120, 115, 40, 40, 40, 40, 40, 135, 120],
+                 [120, 120, 115, 30, 30, 30, 30, 30, 30, 110, 120],
+                 [140, 140, 90, 30, 30, 30, 30, 30, 30, 100, 140, 140]]
+  rasp: [[120, 120, 110, 29, 15, 40, 40, 40, 40, 110, 125, 120],
+         [120, 120, 110, 29, 15, 40, 30, 30, 30, 30, 125, 120, 120]]
+  cessation: [[120, 120, 400, 120, 120]]

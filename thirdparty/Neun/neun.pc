@@ -1,0 +1,10 @@
+prefix=/usr/local/NeuralNetworks/0.3.2
+exec_prefix=${prefix}
+includedir=${prefix}
+
+Name: neun
+Description: An efficient library to simulate neural networks in C++.
+Requires:
+Version: 0.3.2
+Libs: 
+Cflags: -I${includedir}
