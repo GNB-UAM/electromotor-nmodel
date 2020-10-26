@@ -9,5 +9,6 @@ target_link_libraries(emmodel ${YAMLCPP_LIBRARY})
 
 link_libraries("-static")
 add_executable(emmodelGAfit emmodelGAFit.cpp)
+add_dependencies(emmodelGAfit GA)
 set_target_properties(emmodelGAfit PROPERTIES LINK_FLAGS "-static" )
 target_link_libraries(emmodelGAfit ${YAMLCPP_LIBRARY} ${CMAKE_SOURCE_DIR}/thirdparty/GA/ga/libga.a)

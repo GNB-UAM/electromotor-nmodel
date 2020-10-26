@@ -27,6 +27,9 @@ link_directories(${Boost_LIBRARY_DIRS})
 find_package(HDF5 REQUIRED COMPONENTS CXX)
 find_package(YamlCpp REQUIRED)
 
+add_custom_target(GA COMMAND make lib
+	          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/GA
+			   )
 add_subdirectory(thirdparty/Neun)
 add_subdirectory(thirdparty/libStats)
 add_subdirectory(src)
