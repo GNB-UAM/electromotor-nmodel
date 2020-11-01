@@ -20,8 +20,8 @@ matrix:
       addons:
        apt:
          packages: &precise_latest_boost_packages
-           - gcc
-           - g++
+           - gcc-9
+           - g++-9
            - cmake-data
            - cmake
            # - gcov-4.9
