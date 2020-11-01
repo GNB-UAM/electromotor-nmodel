@@ -14,14 +14,14 @@ env:
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: ${LINUX_DIST}
       sudo: true
       compiler: gcc
       addons:
        apt:
          packages: &precise_latest_boost_packages
-           - gcc-9
-           - g++-9
+           - gcc
+           - g++
            - cmake-data
            - cmake
            # - gcov-4.9
@@ -39,7 +39,6 @@ matrix:
 before_install:
     # Combine global build options with OS/compiler-dependent options
     - export CMAKE_OPTIONS=${CMAKE_OPTIONS}" "${ENV_CMAKE_OPTIONS}
-    - export CXX="g++-9" CC="gcc-9"
     - export CXX_FLAGS=${CXX_FLAGS}" "${ENV_CXX_FLAGS}
 
 install:
