@@ -31,6 +31,7 @@ matrix:
            - libyaml-cpp-dev
            - libboost-all-dev
            - libhdf5-dev
+           - libhdf5-cpp-103
          sources: &precise_latest_boost_sources
            - ubuntu-toolchain-r-test
            # - llvm-toolchain-precise-3.7
