@@ -28,7 +28,7 @@ matrix:
            # - clang-3.7
            # - valgrind
            # Misc
-           - cpp-yaml
+           - libyaml-cpp-dev
          sources: &precise_latest_boost_sources
            - ubuntu-toolchain-r-test
            # - llvm-toolchain-precise-3.7
