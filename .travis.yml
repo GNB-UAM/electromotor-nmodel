@@ -14,7 +14,7 @@ env:
 matrix:
   include:
     - os: linux
-      dist: ${LINUX_DIST}
+      dist: focal
       sudo: true
       compiler: gcc
       addons:
