@@ -28,7 +28,7 @@
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc/4.0/)
 ![Boost v1.45 dependency](https://img.shields.io/badge/boost-v1.45-blue?style=flat-square)
 ![CMake v2.8 dependency](https://img.shields.io/badge/cmake-v2.8-blue?style=flat-square)
-![Build Status](http://img.shields.io/travis/badges/badgerbadgerbadger.svg?style=flat-square)
+![Build Status](https://img.shields.io/travis/GNB-UAM/electromotor-nmodel/master.svg?style=flat-square)
 
  > Computational model of the electromotor command network of pulse-type mormyrids. Code also includes the genetic algorithm used to automatically tune the parameters of the model to predefined target patterns.
 ---
