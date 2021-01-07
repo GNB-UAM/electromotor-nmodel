@@ -63,7 +63,7 @@ make
 
 ### emmodel
 
-Simulates the electromotor command network using the parameters described by the input file. It outputs the current value of each synapse (E<sub>DP</sub>, E<sub>PCN</sub>,I<sub>DP</sub>, I<sub>PCN</sub>, E<sub>CDP</sub>) and the voltage from each neuron (VPd, DP, PCN and CN) in every time step of the simulation described in the config input file (see [References](#References) for more information).
+Simulates the electromotor command network using the parameters described by the input file. It outputs the current value of each synapse (E<sub>DP</sub>, E<sub>PCN</sub>,I<sub>DP</sub>, I<sub>PCN</sub>, E<sub>CDP</sub>) and the voltage from each neuron (VPd, DP, PCN and CN) in every time step of the simulation described in the config file (see [References](#References) for more information).
 
 ```
 $ ./emmodel <option(s)> SOURCES
