@@ -48,7 +48,7 @@ git clone https://github.com/GNB-UAM/electromotor-nmodel.git
 
 Ǹow make sure you install all required packages
 ```
-sudo apt-get install libboost-all-dev libyaml-cpp libhdf5-dev git-all cmake
+sudo apt-get install libboost-all-dev libyaml-cpp-dev libhdf5-dev libhdf5-cpp-103 git-all cmake
 ```
 Now use cmake to compile the source and build the binaries.
 ```
