@@ -3,40 +3,43 @@
 
 #include <iostream>
 
-class ModelOutput{
-private:
-    std::string _oFileName;
-    std::ofstream _oFile;
+class ModelOutput {
+ private:
+  std::string _oFileName;
+  std::ofstream _oFile;
 
-public:
-    static const char endStep = {'\n'};
-    static const bool endModelOutput = {'\0'};
+ public:
+  static const char endStep = {'\n'};
 
-    ModelOutput(std::string oFileName){
-        _oFileName = oFileName;
-        _oFile.open(_oFileName);
-        if (_oFile.fail()) throw "ModelOutput: Problem opening ElectromotorModel output file.";
-        if (_oFile.is_open()) {
-          _oFile << "";
-        }
+  ModelOutput(std::string oFileName) {
+    _oFileName = oFileName;
+    _oFile.open(_oFileName);
+    if (_oFile.fail() || !_oFile.is_open()) {
+      std::cerr << "ModelOutput: Problem opening ElectromotorModel output file."
+                << std::endl;
+      exit(-1);
+    }
+    _oFile << "";
+  }
+
+  template <class T>
+  ModelOutput& operator<<(T* data) {
+    _oFile << data << " ";
+    return *this;
+  }
+
+  template <class T>
+  ModelOutput& operator<<(T data) {
+    if (data == endStep) {
+      _oFile << endStep;
+      return *this;
     }
 
-    template <class T>
-    void operator<<(T data){
-        if (data == endStep){
-            _oFile << endStep;
-            return;
-        }
+    _oFile << data << " ";
+    return *this;
+  }
 
-        if (data == endModelOutput){
-            _oFile.close();
-            return;
-        }
-
-        _oFile << data << " ";
-    }
-
-
+  void close() { _oFile.close(); }
 };
 
 #endif

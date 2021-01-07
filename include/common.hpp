@@ -35,16 +35,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define COMMON_H_
 
 #include "DiffusionSynapsis.h"
-#include "RungeKutta4.h"
-#include "IzhikevichModel.h"
+#include "EMConfig.hpp"
+#include "ElectromotorModelStd.hpp"
 #include "IntegratedSystemWrapper.h"
+#include "IzhikevichModel.h"
+#include "RungeKutta4.h"
 
 typedef RungeKutta4 Integrator;
 // typedef Stepper StepIntegrator;
+
 // typedef DifferentialNeuronWrapper<HindmarshRoseModel<double>, Integrator>
 // Neuron;
 typedef IntegratedSystemWrapper<IzhikevichModel<double>, Integrator> Neuron;
+
 typedef DiffusionSynapsis<Neuron, Neuron, Integrator> Synapsis;
 // typedef DiffusionSynapsis<Neuron, IzNeuron, Integrator> SynapsisN2IzN;
 // typedef DiffusionSynapsis<IzNeuron, Neuron, Integrator> SynapsisIzN2N;
+
+typedef EMConfig<Neuron, Synapsis> ProblemConfig;
+
+typedef ElectromotorModelStd<ProblemConfig> ElectromotorModel;
 #endif

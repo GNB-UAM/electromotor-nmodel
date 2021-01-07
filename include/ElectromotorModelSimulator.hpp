@@ -37,16 +37,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cfloat>
 #include <climits>
 #include <cmath>
+#include <common.hpp>
+#include <exception>
 #include <numeric>
 #include <utility>
 #include <vector>
-#include <exception>
-#include "ElectromotorModel.hpp"
 
 class ElectromotorModelSimulator {
  private:
   std::unique_ptr<ElectromotorModel> _model;
-
   bool _evalPerformed = false;
 
   std::array<float, 4> _fitValues;
@@ -56,25 +55,23 @@ class ElectromotorModelSimulator {
 
   static const std::vector<float> _patWeight;
 
-  std::vector< std::vector<int> > _IPIs;
+  std::vector<std::vector<int> > _IPIs;
   std::array<int, 4> _targetSPI;
 
  public:
-
-  ElectromotorModelSimulator(ProblemConfig* info) 
+  ElectromotorModelSimulator(ProblemConfig* info)
       : _model(std::make_unique<ElectromotorModel>(info)),
-        patternIPIs(info->getPatternIPIs()){
-  }
+        patternIPIs(info->getPatternIPIs()) {}
 
-  ElectromotorModelSimulator(ProblemConfig* info, std::unique_ptr<ElectromotorModel> model)
-      : _model(std::move(model)),
-        patternIPIs(info->getPatternIPIs()){
-  }
+  ElectromotorModelSimulator(ProblemConfig* info,
+                             std::unique_ptr<ElectromotorModel> model)
+      : _model(std::move(model)), patternIPIs(info->getPatternIPIs()) {}
+
+  float runSimulations() { return evaluate(); }
 
   float evaluate() {
     for (Synapsis* s : _model->syns) {
-      if (s->get(Synapsis::alpha) < 0 || s->get(Synapsis::beta) < 0)
-        return 0;
+      if (s->get(Synapsis::alpha) < 0 || s->get(Synapsis::beta) < 0) return 0;
     }
 
     ProblemConfig* info = ProblemConfig::get_instance();
@@ -88,7 +85,7 @@ class ElectromotorModelSimulator {
       _IPIs.push_back(model.run(pattern));
 
       if (_IPIs[n].size() < 2) {
-        throw std::logic_error("Less than 2 IPIs when evaluating pattern" + ProblemConfig::patternNames[n]);
+        return 0;
       }
 
       _fitValues[n] = _evalPattern(pattern);
@@ -99,19 +96,17 @@ class ElectromotorModelSimulator {
     return _eval;
   }
 
-  std::vector< std::vector<int> >& getIPIs() { return _IPIs; }
+  std::vector<std::vector<int> >& getIPIs() { return _IPIs; }
 
   std::array<int, 4>& getTargets() { return _targetSPI; }
-  
+
   float getEval() {
-    if (!_evalPerformed)
-      evaluate();
+    if (!_evalPerformed) evaluate();
     return _eval;
   }
 
   std::array<float, 4>& getFitValues() {
-    if (!_evalPerformed)
-      evaluate();
+    if (!_evalPerformed) evaluate();
     return _fitValues;
   }
 
@@ -165,7 +160,7 @@ class ElectromotorModelSimulator {
   }
 
   std::vector<int> _interp1(std::vector<int>& y, const int step,
-                           const int maxX) {
+                            const int maxX) {
     if (y.size() < 1) return {};
     std::vector<int> y_new;
     y_new.reserve(maxX / step);
@@ -192,10 +187,6 @@ class ElectromotorModelSimulator {
     for (unsigned int i = 0; i < size; ++i) {
       int iSqDiff = (a[i] - b[i]) * (a[i] - b[i]);
       ret += iSqDiff / (a.size() - 1);
-    }
-    if (ret < 0) {
-      std::cout << "negative ret: " << ret << " (size a:" << a.size()
-                << " b:" << b.size() << ")" << std::endl;
     }
     return ret;
   }

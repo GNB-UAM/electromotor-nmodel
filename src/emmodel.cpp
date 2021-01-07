@@ -43,8 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include <random>
 
-#include "ElectromotorModel.hpp"
-#include "ProblemConfig.hpp"
 #include "common.hpp"
 
 using namespace std;

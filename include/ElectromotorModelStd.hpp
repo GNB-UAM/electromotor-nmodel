@@ -31,8 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
 
-#ifndef ELECTROMOTOR_MODEL_H_
-#define ELECTROMOTOR_MODEL_H_
+#ifndef ELECTROMOTOR_MODEL_STD_H_
+#define ELECTROMOTOR_MODEL_STD_H_
 
 #include <cfloat>
 #include <climits>
@@ -43,19 +43,35 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include <vector>
 
-#include "ProblemConfig.hpp"
 #include "ModelOutput.hpp"
-#include "common.hpp"
 
-class ElectromotorModel {
+template <typename ProblemConfigType>
+class ElectromotorModelStd {
+ public:
+  typedef typename ProblemConfigType::neuron_t NeuronType;
+  typedef typename ProblemConfigType::synapsis_t SynapsisType;
+  typedef typename ProblemConfigType::neuron_t::ConstructorArgs
+      NeuronConstructorArgs;
+  typedef typename ProblemConfigType::synapsis_t::ConstructorArgs
+      SynapsisConstructorArgs;
+  typedef typename ProblemConfigType::pattern pattern_t;
+  typedef typename ProblemConfigType::neuron_t::parameter NeuronParameter;
+  typedef typename ProblemConfigType::synapsis_t::parameter SynapsisParameter;
+
+  static constexpr std::vector<std::string> SynNames() {
+    return std::vector<std::string>{"VPd_DP", "VPd_PCN", "DP_CN", "PCN_CN",
+                                    "CN_VPd"};
+  }
+
+  static constexpr std::vector<std::string> NeuNames() {
+    return std::vector<std::string>{"VPd", "DP", "PCN", "CN"};
+  }
+
  private:
   static const short NO_SPK = -1;
 
   bool simulationPerformed = false;
   std::unique_ptr<ModelOutput> _out;
-
-  static const std::vector<std::string> _SynNames;
-  static const std::vector<std::string> _NeuNames;
 
   std::default_random_engine _getRand;
   std::uniform_int_distribution<int> _timeRange{30, 60};
@@ -77,110 +93,106 @@ class ElectromotorModel {
   double _lastSpkTime = 0.0;
 
   std::array<int, 4> _targetSPI;
+
  public:
   enum synapsis { s1, s2, sA, sB, sBack, n_synapsis };
   enum neuron { VPd, DP, PCN, CN, n_neurons };
 
-  Neuron _VPd, _DP, _PCN, _CN;
-  Synapsis _s1, _s2, _sA, _sB, _sBack;
+  NeuronType _VPd, _DP, _PCN, _CN;
+  SynapsisType _s1, _s2, _sA, _sB, _sBack;
 
-  std::vector<Synapsis*> syns = {&_s1, &_s2, &_sA, &_sB, &_sBack};
-  std::vector<Neuron*> neuns = {&_VPd, &_DP, &_PCN, &_CN};
+  std::vector<SynapsisType*> syns = {&_s1, &_s2, &_sA, &_sB, &_sBack};
+  std::vector<NeuronType*> neuns = {&_VPd, &_DP, &_PCN, &_CN};
 
-  ElectromotorModel(ProblemConfig* info)
+  ElectromotorModelStd(ProblemConfigType* info)
       : _step(info->getStep()),
-        _VPd(info->getNeuronParams(_NeuNames[VPd])),
-        _DP(info->getNeuronParams(_NeuNames[DP])),
-        _PCN(info->getNeuronParams(_NeuNames[PCN])),
-        _CN(info->getNeuronParams(_NeuNames[CN])),
-        _s1(_VPd, Neuron::v, _DP, Neuron::v,
-            info->getSynapsisParams(_SynNames[s1]), 5),
-        _s2(_VPd, Neuron::v, _PCN, Neuron::v,
-            info->getSynapsisParams(_SynNames[s2]), 5),
-        _sA(_DP, Neuron::v, _CN, Neuron::v,
-            info->getSynapsisParams(_SynNames[sA]), 5),
-        _sB(_PCN, Neuron::v, _CN, Neuron::v,
-            info->getSynapsisParams(_SynNames[sB]), 5),
-        _sBack(_CN, Neuron::v, _VPd, Neuron::v,
-               info->getSynapsisParams(_SynNames[sBack]), 5),
-        _lastSpkTime(0.0) {
+        _VPd(info->getNeuronParams(NeuNames()[VPd])),
+        _DP(info->getNeuronParams(NeuNames()[DP])),
+        _PCN(info->getNeuronParams(NeuNames()[PCN])),
+        _CN(info->getNeuronParams(NeuNames()[CN])),
+        _s1(_VPd, NeuronType::v, _DP, NeuronType::v,
+            info->getSynapsisParams(SynNames()[s1]), 5),
+        _s2(_VPd, NeuronType::v, _PCN, NeuronType::v,
+            info->getSynapsisParams(SynNames()[s2]), 5),
+        _sA(_DP, NeuronType::v, _CN, NeuronType::v,
+            info->getSynapsisParams(SynNames()[sA]), 5),
+        _sB(_PCN, NeuronType::v, _CN, NeuronType::v,
+            info->getSynapsisParams(SynNames()[sB]), 5),
+        _sBack(_CN, NeuronType::v, _VPd, NeuronType::v,
+               info->getSynapsisParams(SynNames()[sBack]), 5),
+        _lastSpkTime(0.0) {}
+
+  ElectromotorModelStd(ProblemConfigType* info, std::string outFileName)
+      : ElectromotorModelStd(info) {
+    _out = std::make_unique<ModelOutput>(outFileName);
   }
 
-  ElectromotorModel(ProblemConfig* info, std::string outFileName)
-      : ElectromotorModel(info){
-        _out = std::make_unique<ModelOutput>(outFileName);
-  }
-
-  ElectromotorModel(const ElectromotorModel& model)
+  ElectromotorModelStd(const ElectromotorModelStd& model)
       : _step(model.getStep()),
         _VPd(model.getNeuronParams(VPd)),
         _DP(model.getNeuronParams(DP)),
         _PCN(model.getNeuronParams(PCN)),
         _CN(model.getNeuronParams(CN)),
-        _s1(_VPd, Neuron::v, _DP, Neuron::v,
+        _s1(_VPd, NeuronType::v, _DP, NeuronType::v,
             model.getSynapsisParams(s1), 5),
-        _s2(_VPd, Neuron::v, _PCN, Neuron::v,
+        _s2(_VPd, NeuronType::v, _PCN, NeuronType::v,
             model.getSynapsisParams(s2), 5),
-        _sA(_DP, Neuron::v, _CN, Neuron::v,
-            model.getSynapsisParams(sA), 5),
-        _sB(_PCN, Neuron::v, _CN, Neuron::v,
+        _sA(_DP, NeuronType::v, _CN, NeuronType::v, model.getSynapsisParams(sA),
+            5),
+        _sB(_PCN, NeuronType::v, _CN, NeuronType::v,
             model.getSynapsisParams(sB), 5),
-        _sBack(_CN, Neuron::v, _VPd, Neuron::v,
+        _sBack(_CN, NeuronType::v, _VPd, NeuronType::v,
                model.getSynapsisParams(sBack), 5),
-        _lastSpkTime(0.0) {
-  }
+        _lastSpkTime(0.0) {}
 
-  std::vector<int> run(ProblemConfig::pattern pattern) {
-    ProblemConfig* info = ProblemConfig::get_instance();
+  std::vector<int> run(pattern_t pattern) {
+    ProblemConfigType* info = ProblemConfigType::get_instance();
 
     for (int iPart = 0; iPart < info->getSimParts(pattern); ++iPart) {
       _simSteps.push_back(info->getMaxStep(pattern, iPart));
       iExtNeurons tmpIExtData = {
-          info->getNeunInput(pattern, _NeuNames[VPd], iPart),
-          info->getNeunInput(pattern, _NeuNames[DP], iPart),
-          info->getNeunInput(pattern, _NeuNames[PCN], iPart)};
+          info->getNeunInput(pattern, NeuNames()[VPd], iPart),
+          info->getNeunInput(pattern, NeuNames()[DP], iPart),
+          info->getNeunInput(pattern, NeuNames()[PCN], iPart)};
       _iExt.push_back(std::move(tmpIExtData));
     }
 
     _randomInitialization();
+
     return _simPattern();
   }
 
-  Neuron::ConstructorArgs getNeuronParams(const ElectromotorModel::neuron n) const {
-    Neuron::ConstructorArgs args;
+  NeuronConstructorArgs getNeuronParams(
+      const ElectromotorModelStd::neuron n) const {
+    NeuronConstructorArgs args;
 
-    args.params[Neuron::a] = neuns[n]->get(Neuron::a);
-    args.params[Neuron::b] = neuns[n]->get(Neuron::b);
-    args.params[Neuron::c] = neuns[n]->get(Neuron::c);
-    args.params[Neuron::d] = neuns[n]->get(Neuron::d);
-    args.params[Neuron::threshold] = neuns[n]->get(Neuron::threshold);
-
-    return args;
-  }
-
-  Synapsis::ConstructorArgs getSynapsisParams(const ElectromotorModel::synapsis s) const{
-    Synapsis::ConstructorArgs args;
-
-    args.params[Synapsis::alpha] = syns[s]->get(Synapsis::alpha);
-    args.params[Synapsis::beta] = syns[s]->get(Synapsis::beta);
-    args.params[Synapsis::threshold] = syns[s]->get(Synapsis::threshold);
-    args.params[Synapsis::esyn] = syns[s]->get(Synapsis::esyn);
-    args.params[Synapsis::gsyn] = syns[s]->get(Synapsis::gsyn);
-    args.params[Synapsis::T] = syns[s]->get(Synapsis::T);
+    for (int i = 0; i < NeuronType::n_parameters; i++) {
+      args.params[i] = neuns[n]->get((NeuronParameter)i);
+    }
 
     return args;
   }
 
-  double getStep() const { return _step; } 
+  SynapsisConstructorArgs getSynapsisParams(
+      const ElectromotorModelStd::synapsis s) const {
+    SynapsisConstructorArgs args;
+
+    for (int i = 0; i < SynapsisType::n_parameters; i++) {
+      args.params[i] = syns[s]->get((SynapsisParameter)i);
+    }
+
+    return args;
+  }
+
+  double getStep() const { return _step; }
 
  private:
-
-  void _printStep(){
+  void _printStep() {
     for (auto syn : syns) {
-      *_out << syn->get(Synapsis::i);
+      *_out << syn->get(SynapsisType::i);
     }
     for (auto neun : neuns) {
-      *_out << neun->get(Neuron::v);
+      *_out << neun->get(NeuronType::v);
     }
     *_out << ModelOutput::endStep;
   }
@@ -241,8 +253,8 @@ class ElectromotorModel {
 
         if (_out) _printStep();
 
-        int IPI = _detectIPI(_CN.get(Neuron::v), totalt + t);
-        if (IPI>0) IPIs.push_back(IPI); 
+        int IPI = _detectIPI(_CN.get(NeuronType::v), totalt + t);
+        if (IPI > 0) IPIs.push_back(IPI);
       }
       totalt += nSubSimSteps;
       ++iSubSim;
@@ -251,10 +263,5 @@ class ElectromotorModel {
     return IPIs;
   }
 };
-
-const std::vector<std::string> ElectromotorModel::_SynNames = {
-    "VPd_DP", "VPd_PCN", "DP_CN", "PCN_CN", "CN_VPd"};
-const std::vector<std::string> ElectromotorModel::_NeuNames = {"VPd", "DP",
-                                                               "PCN", "CN"};
 
 #endif

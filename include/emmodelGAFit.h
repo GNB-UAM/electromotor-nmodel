@@ -30,8 +30,8 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
-#ifndef EMMODEL_GAFIT_HPP
-#define EMMODEL_GAFIT_HPP
+#ifndef EMMODEL_GA_FIT_H
+#define EMMODEL_GA_FIT_H
 
 #define INSTANTIATE_REAL_GENOME
 #include <ga/GARealGenome.h>
@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 
 #include "ElectromotorModelSimulator.hpp"
-#include "ProblemConfig.hpp"
+#include "common.hpp"
 
 float Objective(GAGenome&);
 std::unique_ptr<ElectromotorModel> mutateNModel(GARealGenome& g);

@@ -1,13 +1,13 @@
 /*************************************************************
 
-Copyright (c)   2020, Ángel Lareo Fernández
-All rights reserved.
-
 Please, if you use this model or the code of the genetic
 algorithm, cite in your publication the following paper:
 A. Lareo, P. Varona. F. Rodríguez. Modeling the variability
 of the electromotor command system of pulse mormyrids.
 BioRxiv 10.1101/2020.06.09.142083
+
+Copyright (c)   2020, Ángel Lareo Fernández
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -125,6 +125,12 @@ int main(int argc, char** argv) {
         printEachGens = atoi(optarg);
         break;
     }
+  }
+
+  if (inputFilename.empty() || outputFilename.empty()) {
+    std::cerr << "You must declare input (-i) and output (-o) files";
+    show_usage(argv[0]);
+    return -1;
   }
 
   testFile(inputFilename);
@@ -290,8 +296,8 @@ void printResult(GARealGenome& realBestGen) {
         << std::endl;
 
   out << "#The final GA generated:" << std::endl;
-  for (unsigned i = 0; i < 5; i++) {
-    out << synNames[i] << ":" << std::endl;
+  for (unsigned i = 0; i < ElectromotorModel::SynNames().size(); i++) {
+    out << ElectromotorModel::SynNames()[i] << ":" << std::endl;
     for (unsigned j = 0; j < varParams.size(); j++) {
       out << "  " << varParamsNames[j] << ": "
           << nmodel->syns[i]->get((Synapsis::parameter)varParams[j])
