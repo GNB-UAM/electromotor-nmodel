@@ -3,4 +3,6 @@ ga-results/
 results/
 bin/
 build/
+thirdparty/GA/ga/BUILD
+thirdparty/GA/ga/libga.a
 *~
