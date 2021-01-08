@@ -43,7 +43,7 @@ Instructions are provided to build the project in Ubuntu.
 
 First, clone the source repository from Github. From terminal, go to the directory you want to download the source code and run:
 ```
-git clone https://github.com/GNB-UAM/electromotor-nmodel.git
+git clone --recursive https://github.com/GNB-UAM/electromotor-nmodel.git
 ```
 
 Ǹow make sure you install all required packages
