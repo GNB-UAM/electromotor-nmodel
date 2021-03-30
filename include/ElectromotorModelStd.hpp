@@ -45,6 +45,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ModelOutput.hpp"
 
+// Random initialization time range
+#define MIN_TIME_RANDOM_INIT 300
+#define MAX_TIME_RANDOM_INIT 500
+
 template <typename ProblemConfigType>
 class ElectromotorModelStd {
  public:
@@ -74,7 +78,8 @@ class ElectromotorModelStd {
   std::unique_ptr<ModelOutput> _out;
 
   std::default_random_engine _getRand;
-  std::uniform_int_distribution<int> _timeRange{30, 60};
+  std::uniform_int_distribution<int> _timeRange{MIN_TIME_RANDOM_INIT,
+                                                MAX_TIME_RANDOM_INIT};
 
   struct iExtNeurons {
     double VPd;

@@ -43,6 +43,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include <vector>
 
+// Define parameters for GA evaluation function
+#define PATTERN_NORMALIZATION_X_VALUE 1000
+#define PATTERN_INTERPOLATION_STEP 20
+
 class ElectromotorModelSimulator {
  private:
   std::unique_ptr<ElectromotorModel> _model;
@@ -116,7 +120,8 @@ class ElectromotorModelSimulator {
     float ret = 0.0, minRet = INT_MAX;
 
     for (unsigned int patI = 0; patI < patternIPIs[pattern].size(); ++patI) {
-      int newMaxX = 1000, interpStep = 20;
+      int newMaxX = PATTERN_NORMALIZATION_X_VALUE,
+          interpStep = PATTERN_INTERPOLATION_STEP;
 
       std::vector<int> normIPIs = _normalize(_IPIs[pattern], newMaxX);
       std::vector<int> normPatIPIs =
