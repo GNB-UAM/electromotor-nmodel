@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(efish-nmodel CXX)
+project(electromotor-nmodel CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake.modules/")
 
@@ -32,22 +32,28 @@ add_custom_target(GA COMMAND make lib
 			   )
 add_subdirectory(thirdparty/Neun)
 add_subdirectory(thirdparty/libStats)
+add_subdirectory(include)
 add_subdirectory(src)
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Modeling the variability of the electromotor command system of pulse mormyrids.")
 SET(CPACK_PACKAGE_VENDOR "Lareo, A., Varona P. and Rodriguez, FB.")
 set(CPACK_PACKAGE_CONTACT "angel.lareo@gmail.com")
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "Readme.md")
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/.Description")
 SET(CPACK_PACKAGE_VERSION_MAJOR ${CMake_VERSION_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${CMake_VERSION_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${CMake_VERSION_PATCH})
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
 
-#SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-program-options1.40.0")
-#set(CPACK_DEBIAN_PACKAGE_SECTION "science")
-#set(CPACK_GENERATOR "DEB")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "A. Lareo")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-dev (>= 1.45)")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libyaml-cpp-dev (>= 0.6.2)")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libhdf5-dev (>= 1.10.4)")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libhdf5-cpp-103 (>= 1.10.4)")
+SET(CPACK_DEBIAN_PACKAGE_SECTION "science")
+SET(CPACK_GENERATOR "DEB")
 
-#include(CPack)
 
-#configure_file(neun.pc.in neun.pc @ONLY)
-#install(FILES neun.pc DESTINATION pkgconfig)
+include(CPack)
+
+configure_file(electromotor-nmodel.pc.in ${CMAKE_SOURCE_DIR}/electromotor-nmodel.pc @ONLY)
+install(FILES electromotor-nmodel.pc DESTINATION pkgconfig)

@@ -1,0 +1,10 @@
+prefix=/usr/local/electromotor-nmodel/0.1.0
+exec_prefix=${prefix}
+includedir=${prefix}
+
+Name: neun
+Description: Modeling the variability of the electromotor command system of pulse mormyrids.
+Requires:
+Version: 0.1.0
+Libs: 
+Cflags: -I${includedir}

@@ -1,0 +1,9 @@
+A model of the electromotor command network and a genetic algorithm
+to fit neural network models to temporal output patterns.
+It is written in an object oriented fashion with heavily templated C++.
+
+To build it, just type:
+> mkdir bin
+> cd bin
+> cmake ..
+> make

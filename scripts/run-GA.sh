@@ -9,7 +9,7 @@ outputDir="$vDir/ga-results/${startConfigName}_${run}"
 mkdir ${outputDir}
 
 GAParameters="G800_N150_P90"
-${vDir}/bin/emmodelGAfit -i ${configFile} -g 800 -n 150 -p 90 \
+${vDir}/bin/emmodelGAFit -i ${configFile} -g 800 -n 150 -p 90 \
         -s "${outputDir}/${startConfigName}_${run}_${GAParameters}.stats" \
         -o "${outputDir}/${startConfigName}_${run}_${GAParameters}.dat"
 

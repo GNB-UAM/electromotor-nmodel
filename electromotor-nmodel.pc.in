@@ -1,0 +1,10 @@
+prefix=@CMAKE_INSTALL_PREFIX@/@PROJECT_NAME@/@PROJECT_VERSION@
+exec_prefix=${prefix}
+includedir=${prefix}
+
+Name: neun
+Description: @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
+Requires:
+Version: @PROJECT_VERSION@
+Libs: 
+Cflags: -I${includedir}
