@@ -36,6 +36,14 @@
 Please, if you use this model or the code of the genetic algorithm, cite in your publication the following paper:
 [![BioRxiv 10.1101/2020.06.09.142083](preprint-header.png)](https://www.biorxiv.org/content/10.1101/2020.06.09.142083v1)
 
+## Installation
+
+A .deb package is provided for Ubuntu 20.04. You can download it [HERE](https://github.com/GNB-UAM/electromotor-nmodel/releases/tag/v0.1.0).
+
+Then, install the .deb package you just download using dpkg:
+```
+dpkg -i electromotor-nmodel_<v>_20.04_amd64.deb
+```
 
 ## Build
 
@@ -77,6 +85,8 @@ Options:
 ```
 
 The input file must be a valid YAML document describing the parameters. See the provided model configurations (ST, SGA, RGA) in `configs/`
+
+The output will be an ASCII file with space-separated columns for each simulation defined in the configuration. For every output file, each column represents the voltage of a neuron in the model (and synaptic currents if argument `-s` is provided). Each row represents a simulation step.
 
 ### emmodelGAFit
 
